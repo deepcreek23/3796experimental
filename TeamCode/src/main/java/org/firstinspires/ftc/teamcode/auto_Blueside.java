@@ -32,6 +32,6 @@ public class auto_Blueside extends OpMode {
 
     @Override
     public void loop() {
-
+        wait(1000);
     }
 }
