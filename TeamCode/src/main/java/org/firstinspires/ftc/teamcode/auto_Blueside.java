@@ -16,13 +16,13 @@ public class auto_Blueside extends OpMode {
 
     @Override
     public void init() {
-        frontRight = hardwareMap.get(DcMotor.class, "port0");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight = hardwareMap.get(DcMotor.class, "port1");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontLeft = hardwareMap.get(DcMotor.class, "port2");
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft = hardwareMap.get(DcMotor.class, "port3");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turner = hardwareMap.get(DcMotor.class, "rot");
         turner.setTargetPosition(0);
@@ -32,6 +32,6 @@ public class auto_Blueside extends OpMode {
 
     @Override
     public void loop() {
-        wait(1000);
+
     }
 }
