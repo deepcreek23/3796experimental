@@ -36,6 +36,8 @@ public class moveShooter extends OpMode{
 
         frontRight.setPower(forward - right - turn);
         frontLeft.setPower(forward + right + turn);
+
+        //WHY WONT IT COMMIT
         backRight.setPower(forward + right - turn);
         backLeft.setPower(forward - right + turn);
         shooter.setPower(velocity);
