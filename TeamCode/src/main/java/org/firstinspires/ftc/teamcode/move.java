@@ -24,11 +24,6 @@ public class move extends OpMode{
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft = hardwareMap.get(DcMotor.class, "port3");
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        turner = hardwareMap.get(DcMotor.class, "rot");
-        turner.setTargetPosition(0);
-        turner.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turner.setPower(.5);
-
     }
     @Override
     public void loop(){
