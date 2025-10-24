@@ -17,12 +17,16 @@ public class move extends OpMode{
     public void init() {
         frontRight = hardwareMap.get(DcMotor.class, "port0");
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight = hardwareMap.get(DcMotor.class, "port1");
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft = hardwareMap.get(DcMotor.class, "port2");
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft = hardwareMap.get(DcMotor.class, "port3");
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     @Override
     public void loop(){
