@@ -32,12 +32,6 @@ public class move extends OpMode{
     }
     @Override
     public void loop(){
-        if(target == 0){
-            turner.setPower(0);
-        } else {
-            turner.setPower(.5);
-        }
-        turner.setPower(.5);
 
         if(target == turner.getCurrentPosition()){
             turner.setPower(0);
