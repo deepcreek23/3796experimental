@@ -44,7 +44,6 @@ public class move extends OpMode{
         telemetry.addData("Right", right);
         telemetry.addData("Turn", turn);
         telemetry.addData("Target", target);
-        telemetry.addData("Actual", turner.getCurrentPosition());
 
 
     }
