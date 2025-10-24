@@ -33,9 +33,6 @@ public class move extends OpMode{
     @Override
     public void loop(){
 
-        if(target == turner.getCurrentPosition()){
-            turner.setPower(0);
-        }
         double forward =-this.gamepad1.left_stick_y;
         double right = this.gamepad1.left_stick_x;
         double turn = this.gamepad1.right_stick_x;
