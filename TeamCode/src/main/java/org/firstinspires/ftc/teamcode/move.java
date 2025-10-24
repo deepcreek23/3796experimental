@@ -35,6 +35,7 @@ public class move extends OpMode{
         frontLeft.setPower(forward + right + turn);
         backRight.setPower(forward + right - turn);
         backLeft.setPower(forward - right + turn);
+
         if(forward == 0){
             telemetry.addData("Forward", -forward);
         }else{
