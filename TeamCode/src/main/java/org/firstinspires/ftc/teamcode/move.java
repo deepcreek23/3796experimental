@@ -32,21 +32,6 @@ public class move extends OpMode{
         double right = this.gamepad1.left_stick_x;
         double turn = this.gamepad1.right_stick_x;
 
-        boolean dright = this.gamepad1.dpadRightWasPressed();
-        boolean dleft = this.gamepad1.dpadLeftWasPressed();
-
-        if(dright){
-            target += 100;
-        } else if (dleft) {
-            target -= 100;
-        }
-        turner.setTargetPosition(target);
-
-        if(this.gamepad1.a){
-            target = 0;
-        }
-
-
         frontRight.setPower(forward - right - turn);
         frontLeft.setPower(forward + right + turn);
         backRight.setPower(forward + right - turn);
