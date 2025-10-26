@@ -35,6 +35,11 @@ public class move extends OpMode{
             mult += 0.1;
         }
 
+        if(mult >= 1){
+            mult = 1;
+        } else if (mult <= 0){
+            mult = 0;
+        }
         double forward =-this.gamepad1.left_stick_y;
         double right = this.gamepad1.left_stick_x;
         double turn = this.gamepad1.right_stick_x;
