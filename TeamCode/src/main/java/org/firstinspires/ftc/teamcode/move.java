@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
 public class move extends OpMode{
+    double mult = 0;
     private DcMotor frontRight; // This one is at port 0, as of 10/18/2025 at 8:13 PM
     private DcMotor backRight;  // This one is at port 1 as of 10/18/2025 at 8:13 PM
     private DcMotor frontLeft;  // This one is at port 2 as of 10/18/2025 at 8:13 PM
