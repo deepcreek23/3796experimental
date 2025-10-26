@@ -56,6 +56,7 @@ public class move extends OpMode{
         }
         telemetry.addData("Right", right);
         telemetry.addData("Turn", turn);
+        telemetry.addData("Speed", mult);
 
     }
 
