@@ -44,10 +44,10 @@ public class move extends OpMode{
         double right = this.gamepad1.left_stick_x;
         double turn = this.gamepad1.right_stick_x;
 
-        frontRight.setPower(forward - right - turn);
-        frontLeft.setPower(forward + right + turn);
-        backRight.setPower(forward + right - turn);
-        backLeft.setPower(forward - right + turn);
+        frontRight.setPower(mult *(forward - right - turn));
+        frontLeft.setPower(mult * (forward + right + turn));
+        backRight.setPower(mult * (forward + right - turn));
+        backLeft.setPower(mult * (forward - right + turn));
 
         if(forward == 0){
             telemetry.addData("Forward", -forward);
