@@ -30,7 +30,7 @@ public class move extends OpMode{
     @Override
     public void loop(){
         if(gamepad1.dpad_down){
-            mult -= 0.1;
+            mult += -0.1;
         } else if (gamepad1.dpad_up) {
             mult += 0.1;
         }
