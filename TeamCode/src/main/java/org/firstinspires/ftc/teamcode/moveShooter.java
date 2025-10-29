@@ -32,7 +32,7 @@ public class moveShooter extends OpMode{
         double forward =-this.gamepad1.left_stick_y;
         double right = this.gamepad1.left_stick_x;
         double turn = this.gamepad1.right_stick_x;
-        double velocity = gamepad1.right_trigger;
+        double velocity = gamepad1.right_trigger - gamepad1.left_trigger;
 
         frontRight.setPower(forward - right - turn);
         frontLeft.setPower(forward + right + turn);
