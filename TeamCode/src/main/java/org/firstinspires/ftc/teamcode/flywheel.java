@@ -20,8 +20,12 @@ public class flywheel extends OpMode{
     public void loop(){
         double forward =-this.gamepad1.left_stick_y;
         double right = this.gamepad1.left_stick_x;
-        double turn = this.gamepad1.right_stick_x;
-        double velocity = mult*(gamepad1.right_trigger - gamepad1.left_trigger);
+        double brake = gamepad1.left_trigger;
+        double brake2 = 0;
+        if(brake >= 0){
+            brake2 = 0.1;
+        }
+        double velocity = mult*(gamepad1.right_trigger - brake2);
 
         shooter.setPower(velocity);
         if(forward == 0){
