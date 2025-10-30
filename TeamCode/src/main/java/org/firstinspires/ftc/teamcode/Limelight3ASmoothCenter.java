@@ -13,10 +13,10 @@ public class Limelight3ASmoothCenter extends LinearOpMode {
     private Limelight3A limelight;
 
     // Proportional control constants
-    private static final double KP = 0.01;      // reduced gain for smooth movement
+    private static final double KP = 0.015;      // reduced gain for smooth movement
     private static final double MIN_POWER = 0.03;
-    private static final double MAX_POWER = 0.1;
-    private static final double DEADBAND = 5.0;  // degrees
+    private static final double MAX_POWER = 0.2;
+    private static final double DEADBAND = 1.0;  // degrees
 
     // Smoothing factor for power
     private static final double SMOOTHING = 0.3;
@@ -29,7 +29,7 @@ public class Limelight3ASmoothCenter extends LinearOpMode {
         turnMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(10); // slower polling for smoother control
+        limelight.setPollRateHz(50); // slower polling for smoother control
         limelight.pipelineSwitch(0); // use AprilTag pipeline
         limelight.start();
 
