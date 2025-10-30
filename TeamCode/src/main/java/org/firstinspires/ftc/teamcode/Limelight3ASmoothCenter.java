@@ -24,6 +24,7 @@ public class Limelight3ASmoothCenter extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Map hardware
+        
         turnMotor = hardwareMap.get(DcMotor.class, "turnMotor");
         turnMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turnMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
