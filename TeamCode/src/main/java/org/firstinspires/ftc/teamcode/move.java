@@ -11,6 +11,9 @@ public class move extends OpMode{
     private DcMotor backRight;  // This one is at port 1 as of 10/18/2025 at 8:13 PM
     private DcMotor frontLeft;  // This one is at port 2 as of 10/18/2025 at 8:13 PM
     private DcMotor backLeft;   // This one is at port 3 as of 10/18/2025 at 8:13 PM
+    double xPos = 0;
+    double yPos = 0;
+    double theta = 0;
 
     @Override
     public void init() {
