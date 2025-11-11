@@ -12,7 +12,7 @@ public class flywheel extends OpMode{
 
     @Override
     public void init() {
-        shooter = hardwareMap.get(DcMotor.class, "eHub0");
+        shooter = hardwareMap.get(DcMotor.class, "port0");
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
@@ -38,7 +38,7 @@ public class flywheel extends OpMode{
         telemetry.addData("PEW PEW", velocity);
 
         if(gamepad1.dpadDownWasReleased()){
-            mult += -0.05;
+            mult = mult - 0.05;
         } else if (gamepad1.dpadUpWasReleased()) {
             mult += 0.05;
         }

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
+
 public class Limelight3ASmoothCenter extends LinearOpMode {
 
     private DcMotor turnMotor;
@@ -24,7 +25,7 @@ public class Limelight3ASmoothCenter extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Map hardware
-        
+
         turnMotor = hardwareMap.get(DcMotor.class, "turnMotor");
         turnMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turnMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -46,16 +47,15 @@ public class Limelight3ASmoothCenter extends LinearOpMode {
 
             if (result != null && result.isValid()) {
                 double tx = result.getTx(); // horizontal offset
-                double error = tx;
 
                 double power;
 
                 // Deadband: do nothing if the tag is almost centered
-                if (Math.abs(error) < DEADBAND) {
+                if (Math.abs(tx) < DEADBAND) {
                     power = 0;
                 } else {
                     // proportional control
-                    power = KP * error;
+                    power = KP * tx;
 
                     // apply minimum power threshold
                     if (Math.abs(power) < MIN_POWER) {
