@@ -3,94 +3,173 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
 @TeleOp
 public class finalDriveClass extends OpMode {
-    private DcMotor intake;
-    private DcMotor turn;
-    private DcMotor shoot;
+
+    // Mechanism motors
+    private DcMotor intake;     // Pulls artifacts in
+    private DcMotor turn;       // Aims the launcher slowly/precisely
+    private DcMotor shoot;      // Flywheel shooter
+
+    // Drivetrain motors
     private DcMotor frontRight;
     private DcMotor backRight;
     private DcMotor frontLeft;
     private DcMotor backLeft;
-    double mult;
-    double velo2;
-    double velo3;
 
+    // Driver scaling multiplier (0–1)
+    double mult = 1.0;
+
+    // Mechanism control variables
+    double intakePower = 0;
+    double turnPower = 0;
+
+    // --- Rumble control ---
+    boolean hasRumbled = false;     // prevents repeated rumbling
+    long rumbleCooldownEnd = 0;     // millis timestamp
 
     @Override
     public void init() {
+
+        // ---- Mechanism Motors ----
         intake = hardwareMap.get(DcMotor.class, "port1");
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(intake);
+
         turn = hardwareMap.get(DcMotor.class, "port2");
-        turn.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        turn.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(turn);
+
         shoot = hardwareMap.get(DcMotor.class, "port0");
         shoot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        shoot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        shoot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        // ---- Drivetrain Motors ----
         frontRight = hardwareMap.get(DcMotor.class, "eHub0");
-        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(frontRight);
+
         backRight = hardwareMap.get(DcMotor.class, "eHub1");
-        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(backRight);
+
         frontLeft = hardwareMap.get(DcMotor.class, "eHub2");
-        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(frontLeft);
+
         backLeft = hardwareMap.get(DcMotor.class, "eHub3");
-        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setupMotor(backLeft);
 
+        telemetry.addLine("Robot Initialized");
+    }
 
+    /** Helper method to apply common motor settings */
+    private void setupMotor(DcMotor m) {
+        m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        m.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
     public void loop() {
-        double velocity = mult*(gamepad1.right_trigger - gamepad1.left_trigger);
-        if(gamepad1.a){
-            velo2 = mult;
-        }else if(gamepad1.b){
-            velo2 = -1 * mult;
+
+        // ==========================================================
+        //                     SHOOTER CONTROL + RUMBLE
+        // ==========================================================
+
+        // Shooter controlled by right trigger
+        double shootVelocity = mult * gamepad1.right_trigger;
+        shoot.setPower(shootVelocity);
+
+        boolean shooterAtSpeed = shootVelocity > 0.8; // 80% spin
+        long now = System.currentTimeMillis();
+
+        // Conditions for rumble:
+        // 1. Shooter spinning fast
+        // 2. Trigger pressed hard
+        // 3. Haven't rumbled yet OR cooldown expired
+        if (shooterAtSpeed && gamepad1.right_trigger > 0.8 && (!hasRumbled || now > rumbleCooldownEnd)) {
+
+            // Fire a strong, short rumble (ready-to-shoot feedback)
+            gamepad1.rumble(1, 1, 500);
+
+            // Record rumble event state
+            hasRumbled = true;
+            rumbleCooldownEnd = now + 1000; // 1 second cooldown
         }
-        if(gamepad1.x){
-            velo3 = mult;
-        } else if(gamepad1.y){
-            velo3 = -1 * mult;
+
+        // Reset rumble flag when trigger is released
+        if (gamepad1.right_trigger < 0.2) {
+            hasRumbled = false;
         }
-        double velo3 = mult*(gamepad1.right_stick_x);
-        intake.setPower(velo3);
-        turn.setPower(-velo2 / 2);
-        shoot.setPower(velocity);
+
+
+        // ==========================================================
+        //                     INTAKE CONTROL
+        // ==========================================================
+
+        if (gamepad1.x) {
+            intakePower = mult;
+        } else if (gamepad1.y) {
+            intakePower = -mult;
+        } else {
+            intakePower = 0;
+        }
+        intake.setPower(intakePower);
+
+
+        // ==========================================================
+        //                    TURN MOTOR CONTROL
+        // ==========================================================
+
+        if (gamepad1.a) {
+            turnPower = mult * 0.5;  // slow precise aiming
+        } else if (gamepad1.b) {
+            turnPower = -mult * 0.5;
+        } else {
+            turnPower = 0;
+        }
+        turn.setPower(turnPower);
+
+
+        // ==========================================================
+        //                DRIVER SPEED MULTIPLIER
+        // ==========================================================
+
+        if (gamepad1.dpadUpWasReleased()) {
+            mult += 0.05;
+        } else if (gamepad1.dpadDownWasReleased()) {
+            mult -= 0.05;
+        }
+        // clamp 0 to 1
+        mult = Math.max(0, Math.min(mult, 1));
+
+
+        // ==========================================================
+        //                        DRIVETRAIN
+        // ==========================================================
+
+        double forward = -gamepad1.left_stick_y;
+        double strafe  =  gamepad1.left_stick_x;
+        double rotate  =  gamepad1.right_stick_x;
+
+        double fr = forward - strafe - rotate;
+        double fl = forward + strafe + rotate;
+        double br = forward + strafe - rotate;
+        double bl = forward - strafe + rotate;
+
+        frontRight.setPower(fr * mult);
+        frontLeft.setPower(fl * mult);
+        backRight.setPower(br * mult);
+        backLeft.setPower(bl * mult);
+
+
+        // ==========================================================
+        //                         TELEMETRY
+        // ==========================================================
         telemetry.addData("Multiplier", mult);
-        telemetry.addData("PEW PEW", velocity);
-
-        if(gamepad1.dpadDownWasReleased()){
-            mult = mult - 0.05;
-        } else if (gamepad1.dpadUpWasReleased()) {
-            mult = mult +0.05;
-        }
-
-        if(mult >= 1){
-            mult = 1;
-        } else if (mult <= 0){
-            mult = 0;
-        }
-        double forward =-this.gamepad1.left_stick_y;
-        double right = this.gamepad1.left_stick_x;
-        double turn = this.gamepad1.right_stick_x;
-
-        frontRight.setPower(mult *(forward - right - turn));
-        frontLeft.setPower(mult * (forward + right + turn));
-        backRight.setPower(mult * (forward + right - turn));
-        backLeft.setPower(mult * (forward - right + turn));
-
-        if(forward == 0){
-            telemetry.addData("Forward", -forward);
-        }else{
-            telemetry.addData("Forward", forward);
-        }
-        telemetry.addData("Right", right);
-        telemetry.addData("Turn", turn);
-        telemetry.addData("Speed", mult);
+        telemetry.addData("Shooter Power", shootVelocity);
+        telemetry.addData("Intake Power", intakePower);
+        telemetry.addData("Turn Power", turnPower);
+        telemetry.addData("Forward", forward);
+        telemetry.addData("Strafe", strafe);
+        telemetry.addData("Rotate", rotate);
+        telemetry.addData("Rumble Ready?", shooterAtSpeed);
     }
 }
+
